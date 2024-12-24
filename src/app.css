@@ -1,0 +1,28 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+    --orange: #FF4201;
+    --black: #000000;
+    --white: #FFFFFF;
+    --gray: #E5E5E5;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    font-weight: bold;
+    letter-spacing: -0.02em;
+}
+
+button {
+    font-family: Helvetica, Arial, sans-serif;
+}
