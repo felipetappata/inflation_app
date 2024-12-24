@@ -6,7 +6,7 @@
     
     let chartData = [];
     let width = 0;
-    let height = 256; // 16rem
+    let height = 252; // Reduced from 256 to account for borders
 
     simulation.subscribe(state => {
         chartData = state.dataPoints;
@@ -125,6 +125,8 @@
         margin-bottom: 1rem;
         background: var(--white);
         border: 2px solid var(--black);
+        padding: 0;
+        box-sizing: border-box; /* Add this to include borders in element's total size */
     }
 
     svg {

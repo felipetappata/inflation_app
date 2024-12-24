@@ -1,38 +1,22 @@
-# sv
+# Rates and Levels
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Inflation simulator meant to highlight difference between inflation rate and price level.
 
-## Creating a project
+Hosted at [https://felipetappata.github.io/inflation_app/](https://felipetappata.github.io/inflation_app/)
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Stack
 
-To create a production version of your app:
+- Svelte
+- D3.js
+- TypeScript
 
-```bash
-npm run build
-```
+## License
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+MIT
