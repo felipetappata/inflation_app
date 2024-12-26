@@ -1,14 +1,9 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
     import { simulation } from '$lib/stores/simulation';
+    import { historicalData } from '$lib/stores/historical-data';
     import InflationControls from '$lib/components/InflationControls.svelte';
     import PriceChart from '$lib/components/PriceChart.svelte';
-
-    let currentPrice: number;
-    
-    simulation.subscribe(state => {
-        currentPrice = state.currentPrice;
-    });
 
     let interval: number;
 
@@ -20,6 +15,8 @@
         interval = setInterval(() => {
             simulation.tick();
         }, 100);
+
+        historicalData.initialize();
     });
 
     onDestroy(() => {
@@ -33,10 +30,6 @@
         <h2>Inflation simulator</h2>
     </header>
     
-    <div class="price-display">
-        Price of a 2000 dollar: <span class="price">${currentPrice.toFixed(2)}</span>
-    </div>
-
     <InflationControls />
     <PriceChart />
 </main>
@@ -62,16 +55,5 @@
         font-weight: normal;
         color: var(--black);
         opacity: 0.7;
-    }
-
-    .price-display {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        font-weight: 300;
-    }
-
-    .price {
-        color: var(--orange);
-        font-weight: bold;
     }
 </style>

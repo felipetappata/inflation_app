@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { START_DATE } from './config';
 
 interface DataPoint {
     timestamp: number;
@@ -8,7 +9,7 @@ interface DataPoint {
 interface SimulationState {
     inflationRate: number;
     isRunning: boolean;
-    argentinaModeEnabled: false;
+    hyperModeEnabled: false;  // Changed from argentinaModeEnabled
     currentPrice: number;
     dataPoints: DataPoint[];
     currentDate: Date;
@@ -17,10 +18,10 @@ interface SimulationState {
 const INITIAL_STATE: SimulationState = {
     inflationRate: 2,
     isRunning: true,
-    argentinaModeEnabled: false,
+    hyperModeEnabled: false,  // Changed from argentinaModeEnabled
     currentPrice: 1.00,  // Start with $1.00
     dataPoints: [],
-    currentDate: new Date(2000, 0, 1) // Start from January 2000
+    currentDate: START_DATE
 };
 
 function createSimulationStore() {
@@ -36,10 +37,10 @@ function createSimulationStore() {
         subscribe,
         setInflationRate: (rate: number) => update(state => ({ ...state, inflationRate: rate })),
         toggleRunning: () => update(state => ({ ...state, isRunning: !state.isRunning })),
-        toggleArgentinaMode: () => update(state => ({ 
+        toggleHyperMode: () => update(state => ({  // Changed from toggleArgentinaMode
             ...state, 
-            argentinaModeEnabled: !state.argentinaModeEnabled,
-            inflationRate: !state.argentinaModeEnabled && state.inflationRate > 18 ? 18 : state.inflationRate
+            hyperModeEnabled: !state.hyperModeEnabled,
+            inflationRate: !state.hyperModeEnabled && state.inflationRate > 18 ? 18 : state.inflationRate
         })),
         tick: () => update(state => {
             if (!state.isRunning) return state;
@@ -68,7 +69,8 @@ function createSimulationStore() {
                 dataPoints
             };
         }),
-        reset: () => set(INITIAL_STATE)
+        reset: () => set(INITIAL_STATE),
+        pause: () => update(state => ({ ...state, isRunning: false }))
     };
 }
 
