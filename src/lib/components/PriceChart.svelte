@@ -184,9 +184,9 @@
     }
 
     function calculateAnnualizedRate(start: number, end: number, startDate: Date, endDate: Date): number {
-        const totalChange = end / start - 1;
         const years = (endDate.getTime() - startDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-        return (Math.pow(1 + totalChange, 1 / years) - 1) * 100;
+        // Use the compound annual growth rate (CAGR) formula
+        return ((Math.pow(end / start, 1 / years) - 1) * 100);
     }
 
     function updateSelectionData() {
@@ -393,7 +393,7 @@
                         <span>{((selectionBounds.end.simulated.simulatedPrice / selectionBounds.start.simulated.simulatedPrice - 1) * 100).toFixed(1)}%</span>
                     </div>
                     <div class="data-row">
-                        <span>Annual</span>
+                        <span>Annualized</span>
                         <span>{calculateAnnualizedRate(
                             selectionBounds.start.simulated.simulatedPrice,
                             selectionBounds.end.simulated.simulatedPrice,
@@ -415,7 +415,7 @@
                             <span>{((selectionBounds.end.historical.value / selectionBounds.start.historical.value - 1) * 100).toFixed(1)}%</span>
                         </div>
                         <div class="data-row">
-                            <span>Annual</span>
+                            <span>Annualized</span>
                             <span>{calculateAnnualizedRate(
                                 selectionBounds.start.historical.value,
                                 selectionBounds.end.historical.value,

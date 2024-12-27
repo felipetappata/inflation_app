@@ -24,7 +24,7 @@
     });
 </script>
 
-<main class="container">
+<main>
     <header>
         <h1>Rates and Levels</h1>
         <h2>Inflation simulator</h2>
@@ -32,10 +32,19 @@
     
     <InflationControls />
     <PriceChart />
+
+    <footer>
+        <p class="citation">
+            Data source: U.S. Bureau of Labor Statistics, Consumer Price Index for All Urban Consumers: All Items in U.S. City Average [CPIAUCSL], retrieved from FRED, Federal Reserve Bank of St. Louis; 
+            <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" rel="noopener noreferrer">
+                https://fred.stlouisfed.org/series/CPIAUCSL
+            </a>, December 27, 2024.
+        </p>
+    </footer>
 </main>
 
 <style>
-    .container {
+    main {
         max-width: 48rem;
         margin: 0 auto;
         padding: 2rem 1rem;
@@ -55,5 +64,21 @@
         font-weight: normal;
         color: var(--black);
         opacity: 0.7;
+    }
+
+    .citation {
+        font-size: 0.75rem;
+        color: #666666;
+        margin-top: 2rem;
+        font-family: var(--mono-font);
+    }
+
+    .citation a {
+        color: inherit;
+        text-decoration: underline;
+    }
+
+    .citation a:hover {
+        color: var(--orange);
     }
 </style>

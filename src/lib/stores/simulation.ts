@@ -28,7 +28,9 @@ function createSimulationStore() {
     const { subscribe, set, update } = writable<SimulationState>(INITIAL_STATE);
 
     const simulateMonth = (price: number, annualRate: number) => {
-        return price * (1 + annualRate / 100 / 12);
+        // Current: price * (1 + annualRate / 100 / 12)
+        // Should be: price * Math.pow(1 + annualRate / 100, 1/12)
+        return price * Math.pow(1 + annualRate / 100, 1/12);
     };
 
     const WINDOW_YEARS = 25;

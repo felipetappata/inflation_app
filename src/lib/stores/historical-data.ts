@@ -9,7 +9,7 @@ function createHistoricalDataStore() {
         subscribe,
         initialize: async () => {
             try {
-                const response = await fetch('/usa.json');
+                const response = await fetch('data/usa.json');
                 const usaData = await response.json();
 
                 // Find the baseline value (closest to START_DATE)
