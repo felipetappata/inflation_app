@@ -9,7 +9,7 @@
 		"dev": "vite dev",
 		"prebuild": "node scripts/fetch-fred-data.mjs",
 		"build": "vite build",
-		"deploy": "npm run build && npx gh-pages -d build -t true",
+		"deploy": "npm run build && npx gh-pages -d build --dotfiles",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
