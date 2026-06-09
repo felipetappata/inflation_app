@@ -1,43 +1,60 @@
 import { writable } from 'svelte/store';
-import type { CountryData } from '$lib/types/cpi';
-import { START_DATE } from './config';
+import { base } from '$app/paths';
+import type { CpiObservation, DataIndex } from '$lib/types/cpi';
+
+export interface HistoricalState {
+	index: DataIndex | null;
+	/** raw observations by country id */
+	series: Record<string, CpiObservation[]>;
+	loaded: boolean;
+	error: string | null;
+}
+
+const INITIAL: HistoricalState = {
+	index: null,
+	series: {},
+	loaded: false,
+	error: null
+};
 
 function createHistoricalDataStore() {
-    const { subscribe, set } = writable<CountryData[]>([]);
+	const { subscribe, set, update } = writable<HistoricalState>(INITIAL);
+	let started = false;
 
-    return {
-        subscribe,
-        initialize: async () => {
-            try {
-                const response = await fetch('data/usa.json');
-                const usaData = await response.json();
+	async function initialize() {
+		if (started) return;
+		started = true;
+		try {
+			const indexRes = await fetch(`${base}/data/index.json`);
+			if (!indexRes.ok) throw new Error(`index.json ${indexRes.status}`);
+			const index: DataIndex = await indexRes.json();
 
-                // Find the baseline value (closest to START_DATE)
-                const baselineValue = usaData.data.find(d => 
-                    new Date(d.date).getTime() === START_DATE.getTime()
-                )?.value;
+			// Load every country's series in parallel.
+			const entries = await Promise.all(
+				index.countries.map(async (c) => {
+					try {
+						const res = await fetch(`${base}/data/${c.id}.json`);
+						if (!res.ok) throw new Error(`${c.id}.json ${res.status}`);
+						const json = await res.json();
+						return [c.id, json.data as CpiObservation[]] as const;
+					} catch (e) {
+						console.error(`Failed to load series for ${c.id}`, e);
+						return [c.id, [] as CpiObservation[]] as const;
+					}
+				})
+			);
 
-                if (!baselineValue) {
-                    console.error('Could not find baseline value for normalization');
-                    return;
-                }
+			const series: Record<string, CpiObservation[]> = {};
+			for (const [id, data] of entries) series[id] = data;
 
-                // Normalize all values relative to the baseline
-                const normalizedData = {
-                    ...usaData,
-                    data: usaData.data.map((d: any) => ({
-                        date: new Date(d.date),
-                        value: d.value / baselineValue
-                    }))
-                };
+			set({ index, series, loaded: true, error: null });
+		} catch (error) {
+			console.error('Failed to load historical data index:', error);
+			set({ ...INITIAL, loaded: true, error: String(error) });
+		}
+	}
 
-                set([normalizedData]);
-            } catch (error) {
-                console.error('Failed to load historical data:', error);
-                set([]);
-            }
-        }
-    };
+	return { subscribe, initialize, _reset: () => { started = false; set(INITIAL); } };
 }
 
 export const historicalData = createHistoricalDataStore();
